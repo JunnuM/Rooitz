@@ -58,9 +58,20 @@ public class PlayerControl : MonoBehaviour
         return Mathf.Atan2(v2.y - v1.y, v2.x - v1.x) * (180 / Mathf.PI);
     }
 
+
+    bool wokenUp = false;
     // Update is called once per frame
     void Update()
     {
+        if(!wokenUp)
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                PlayWakeUp();
+                wokenUp = true;
+            }
+        }
+
         if (activeState == PlayerState.CutScene && !AnimatorIsPlaying())
         {
             activeState = PlayerState.Standing;
@@ -85,7 +96,8 @@ public class PlayerControl : MonoBehaviour
         // I think we mostly need horizontal inputs AKA left to right
         if (activeState == PlayerState.Standing || activeState == PlayerState.Walking)
         {
-            float horizontal = Input.GetAxis("Horizontal");
+            float horizontal = 0; // Input.GetAxis("Horizontal");
+            if(Input.GetKey(KeyCode.Space)) horizontal = 1f;
             // Moves to the right
             if (horizontal >= minimumTilt)
             {
