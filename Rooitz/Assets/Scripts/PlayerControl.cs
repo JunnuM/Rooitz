@@ -40,9 +40,26 @@ public class PlayerControl : MonoBehaviour
         GroundNormal = new Vector2(1, 0);
     }
 
+    float GetAngle(Vector2 v1, Vector2 v2) {
+        return Mathf.Atan2(v2.y - v1.y, v2.x - v1.x) * (180/Mathf.PI);
+    }
+
     // Update is called once per frame
     void Update()
     {
+        ContactPoint2D[] contactList = new ContactPoint2D[4] { new ContactPoint2D(), new ContactPoint2D(), new ContactPoint2D(), new ContactPoint2D() };
+        int numberOfContacts = playerBody.GetContacts(contactList);
+        foreach (ContactPoint2D contact in contactList)
+        {
+            //Debug.DrawRay(contact.point, contact.normal, Color.white);
+            //Debug.Log("Touching point: " + contact.point);
+            if(contact.point.x != 0 && contact.point.y != 0) {
+                Vector2 collisionTangent = new Vector2(contact.normal.y, -contact.normal.x);
+                Vector2 playerAngle = new Vector2(playerObject.transform.eulerAngles.x, playerObject.transform.eulerAngles.y);
+                float angle = GetAngle(playerAngle, collisionTangent);
+                playerObject.transform.rotation = Quaternion.Lerp(playerObject.transform.rotation, Quaternion.Euler(0,0,angle), Time.deltaTime);
+            }
+        }
         // First let get relevant inputs
         // I think we mostly need horizontal inputs AKA left to right
         if (activeState == PlayerState.Standing || activeState == PlayerState.Walking)
