@@ -23,7 +23,7 @@ public class PlayerControl : MonoBehaviour
 
     // Object private variables/references
     private GameObject playerObject;
-    private Animator playerAnimator;
+    public Animator playerAnimator;
     private Transform animatorTransform;
     private Rigidbody2D playerBody;
 

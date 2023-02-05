@@ -10,6 +10,8 @@ public class GameTrigger : MonoBehaviour
     [SerializeField] GameObject startCanvas, endCanvas;
     [SerializeField] Animator endAnimator;
     [SerializeField] PlayerControl player;
+    [SerializeField] Rigidbody2D playerRB;
+    [SerializeField] float newGravity;
 
     bool triggered = false;
 
@@ -24,6 +26,7 @@ public class GameTrigger : MonoBehaviour
         ChangeCam,
         StartEndAnimation,
         RemoveStartCanvas,
+        SetPlayerGravityScale,
     }
 
 
@@ -61,10 +64,14 @@ public class GameTrigger : MonoBehaviour
             case TriggerBehavior.StartEndAnimation:
                 endAnimator.SetTrigger("play_end");
                 player.activeState = PlayerControl.PlayerState.CutScene;
+                player.playerAnimator.enabled = false;
                 endCanvas.SetActive(true);
                 break;
             case TriggerBehavior.RemoveStartCanvas:
                 startCanvas.SetActive(false);
+                break;
+            case TriggerBehavior.SetPlayerGravityScale:
+                playerRB.gravityScale = newGravity;
                 break;
         }
     }
