@@ -19,7 +19,7 @@ public class PlayerControl : MonoBehaviour
     public float WalkingSpeed = 2;
 
     // This is used as a reference to see where character moves when controlled
-    public Vector2 GroundNormal;
+    public Vector3 GroundNormal;
 
     // Object private variables/references
     private GameObject playerObject;
@@ -37,7 +37,7 @@ public class PlayerControl : MonoBehaviour
         playerAnimator = (Animator)playerObject.GetComponentInChildren(typeof(Animator));
         playerAnimator.enabled = false;
         // This might end up unneeded.
-        GroundNormal = new Vector2(1, 0);
+        GroundNormal = new Vector3(1, 0, 0);
     }
 
     public void PlayWakeUp()
@@ -72,11 +72,13 @@ public class PlayerControl : MonoBehaviour
             //Debug.DrawRay(contact.point, contact.normal, Color.white);
             //Debug.Log("Touching point: " + contact.point);
             if (contact.point.x != 0 && contact.point.y != 0)
-            {
+            {    
                 Vector2 collisionTangent = new Vector2(contact.normal.y, -contact.normal.x);
+                GroundNormal = collisionTangent;
                 Vector2 playerAngle = new Vector2(playerObject.transform.eulerAngles.x, playerObject.transform.eulerAngles.y);
                 float angle = GetAngle(playerAngle, collisionTangent);
                 playerObject.transform.rotation = Quaternion.Lerp(playerObject.transform.rotation, Quaternion.Euler(0, 0, angle), Time.deltaTime);
+                break;
             }
         }
         // First let get relevant inputs
@@ -91,7 +93,7 @@ public class PlayerControl : MonoBehaviour
                 RotateCharacter(true);
                 playerAnimator.enabled = true;
                 playerAnimator.Play("Walking");
-                playerBody.velocity = Vector2.Scale(GroundNormal, new Vector2(WalkingSpeed, WalkingSpeed));
+                playerObject.transform.position = Vector3.Lerp(playerObject.transform.position, playerObject.transform.position + GroundNormal, Time.deltaTime * WalkingSpeed);
             }
             // Might be better withouth this left walking section
             /*
