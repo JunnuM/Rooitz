@@ -59,6 +59,12 @@ TagManager:
   - name: Action
     uniqueID: 909608397
     locked: 0
-  - name: Foreground
+  - name: Foreground3
     uniqueID: 3737471053
+    locked: 0
+  - name: Foreground2
+    uniqueID: 3306751545
+    locked: 0
+  - name: Foreground1
+    uniqueID: 3245209443
     locked: 0
