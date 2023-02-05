@@ -8,6 +8,8 @@ public class GameTrigger : MonoBehaviour
     [Header("Parameters for trigger behavior")]
     [SerializeField] CamSettings camSettings;
     [SerializeField] GameObject startCanvas, endCanvas;
+    [SerializeField] Animator endAnimator;
+    [SerializeField] PlayerControl player;
 
     bool triggered = false;
 
@@ -57,8 +59,9 @@ public class GameTrigger : MonoBehaviour
                 CameraController.SetYOffset(camSettings.yOffset, camSettings.useSmoothing);
                 break;
             case TriggerBehavior.StartEndAnimation:
+                endAnimator.SetTrigger("play_end");
+                player.activeState = PlayerControl.PlayerState.CutScene;
                 endCanvas.SetActive(true);
-                Debug.Log("Start end animation");
                 break;
             case TriggerBehavior.RemoveStartCanvas:
                 startCanvas.SetActive(false);
